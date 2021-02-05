@@ -1,2 +1,2 @@
 # ppnm
-Praktisk Programmering og Numeriske Metoder
+Practical Programming and Numerical Methods
