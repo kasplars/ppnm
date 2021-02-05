@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O -std=gnu11
+CFLAGS = -O
 LDLIBS = -lm
 
 default: out.txt
