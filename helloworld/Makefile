@@ -15,7 +15,12 @@ hello.o: hello.c
 	$(CC) $(CFLAGS) -c hello.c
 
 clean:
-	$(RM) hello.o hello
+	$(RM) hello.o hello 
+
+upload: 
+	git add --all
+	git commit --all -m 'Initial commit'
+	git push
 
 test:
 	echo $(LDLIBS)
