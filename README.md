@@ -1,2 +1,2 @@
 # ppnm
-Practical Programming and Numerical Methods
+Repository for the Practical Programming and Numerical Methods course at University of Aarhus.
