@@ -1,0 +1,13 @@
+My max int = 2147483637
+My max int = 2147483638
+My max int = 2147483639
+My max int = 2147483640
+My max int = 2147483641
+My max int = 2147483642
+My max int = 2147483643
+My max int = 2147483644
+My max int = 2147483645
+My max int = 2147483646
+My max int = 2147483647
+The sum up float is 15.4037
+The sum down float is 0
