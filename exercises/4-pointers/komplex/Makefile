@@ -1,11 +1,8 @@
-CC = gcc
-CFLAGS = -O -std=gnu11
-CFLAGS += -Wall
-LDFLAGS = -I.
+CFLAGS = -Wall -std=gnu99
 LDLIBS = -lm
-
-out.txt: komplex
-	./$< > $@
-
-clean:
-	$(RM) komplex *.o
+.PHONEY: all clean
+all              : out.txt           ; cat $<
+out.txt          : main              ; ./$< > $@
+main             : main.o komplex.o  # built-in linking rule is used here
+main.o komplex.o : komplex.h         # built-in compiling rule is used here
+clean            :                   ; $(RM) main main.o komplex.o out.txt

@@ -1,13 +1,28 @@
-My max int = 2147483637
-My max int = 2147483638
-My max int = 2147483639
-My max int = 2147483640
-My max int = 2147483641
-My max int = 2147483642
-My max int = 2147483643
-My max int = 2147483644
-My max int = 2147483645
-My max int = 2147483646
-My max int = 2147483647
+Part 1
+while loops
+my machine epsilon = 2.22045e-16 for double
+my machine epsilon = 1.0842e-19 for long double
+my machine epsilon = 0.000000 for float
+
+for loops
+my machine epislon = 2.22045e-16 for double
+my machine epislon = 1.0842e-19 for long double
+my machine epislon = 0.000000 for float
+
+do while loops
+my machine epsilon = 2.22045e-16 for double
+my machine epsilon = 1.0842e-19 for long double
+my machine epsilon = 0.000000 for float
+
+machine double epsilon = 2.22045e-16
+machine long double epsilon = 1.0842e-19
+machine float epsilon = 0.000000
+
 The sum up float is 15.4037
-The sum down float is 0
+The sum down float is 18.8079
+Explanation for ^ is commented out.
+The sum up double is 21.3716
+The sum down double is 21.3716
+Explanation for ^ is commented out.
+1
+three

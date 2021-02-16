@@ -1,0 +1,46 @@
+Questions Basics
+
+What is the main function?
+	The main function is the first function which is called when the program is executed.
+
+What is compilation and linking (of a C-program)? What is source code, object code, executable code?
+	In the compilation process, the C code (source code) is translated into assembly or machine
+	code (object code). The linker takes the object code and combines it with library files and 
+	creates executable files.
+
+How can you compile and link a C-program which is wholly contained in one file, say hello.c? How do you run the resulting executable code?
+	You can use the C compiler to create the object code from the source code. Then the object 
+	code can be linked with library files, which in combination can be made into an executable. 
+	Example: 
+	gcc -c hello.c -o hello.o
+	gcc -c hello.o -o hello (-lm if one wants to link to C math libraries)
+	In order to run the executable: ./hello 		
+
+How do you supply the compiler with the description of the printf function? Why do you need to do this? How do you link the printf function?
+	You supply the compiler with the printf function by including the stdio.h in the header of
+	one's file. The preprocessor then includes the textual content of the stdio.h file in the
+	file. Otherwise, the compiler does not know what printf is. 
+
+What is stdio.h? Why angle-brackets in #include<stdio.h>? Hint: C preprocessor: including files.
+	stdio.h is the standard input-output library file. It uses streams to operate with physical
+	devices such as the terminal. The angle-brackets indicate that the C preprocessor must 
+	include the file with the name inside the angle-brackets.  
+
+How can you get the manual page of the C standard library function printf? Hint: there is also a utility printf in a POSIX system and man printf will show you the manual page for the printf utility, not the printf function from the C standard library.
+	One gets the manual page of printf by writing "man 3 printf". By writing "man 3 X", one 
+	searches for the manual of the X command in the library calls. 
+	
+
+What are the built-in data types for numbers in the C-language?
+	Integer, double, long double (, complex is not built-in)	
+
+What is the result of the operation 1/2 in C?
+	We are dividing two integers. C tries to round towards the integer with smallest absolute
+	value. Therefore the result is 0.	
+
+In order to use the C mathematical functions, do you need to include any header files? Link any library? Hint: man sin.
+	Yes, one has to include the header: #include<math.h>
+
+What is tgmath.h? If you use tgmath.h do you need to link any library?
+	It lets one use functions like cos with complex arguments. I believe that one has to link
+	with -lm.
