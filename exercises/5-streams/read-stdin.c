@@ -1,13 +1,13 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<math.h>
 
-int main(int argc, char** argv){
-	int items = 1;
+int main(){
 	double x;
-	while (items!=EOF) {
-		items = scanf("%lg",&x);
-		printf("%lg\n",x);
+	int items;
+	items = fscanf(stdin,"%lg",&x);
+	while (items!=EOF) {	
+		printf("x = %lg, sin(x) = %lg, cos(x) = %lg\n",x,sin(x),cos(x));
+		items = fscanf(stdin,"%lg",&x);
 	}
 return 0;
 }
