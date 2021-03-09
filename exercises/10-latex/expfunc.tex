@@ -1,0 +1,52 @@
+\documentclass[onecolumn]{article}
+\usepackage{graphicx}
+%\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{amsmath}
+\title{An implementation of the exponential function in the C-language}
+\author{Kasper Larsen}
+\date{}
+\begin{document}
+	\maketitle
+	
+	\begin{abstract}
+		An implementation of the exponential function.
+	\end{abstract}
+	
+	\section{A: The exponential function}
+	
+	The exponential function $\exp x$ is defined by the following power series: \begin{equation}
+		\exp x \equiv \sum_{k=0}^{\infty}\frac{x^k}{k!} \label{expfunc}
+	\end{equation}
+	It has numerous uses in physics. 
+	
+	\section{A: Implementation}
+	
+	We can approximate \eqref{expfunc} by its 10th partial sum; i.e., \begin{align*}
+	\exp x &= \sum_{k=0}^{\infty}\frac{x^k}{k!}\simeq \sum_{k=0}^{10}\frac{x^k}{k!}\:. \end{align*}
+	For very large $x$, the accuracy may not be that good. We can expand the above into the following: \begin{align}
+		\exp x&\simeq\sum_{k=0}^{10}\frac{x^k}{k!}\\
+		&=1+x\left( 1+\frac{x}{2}\left( 1+\frac{x}{3} \left( 1+\frac{x}{4}\left( 1+\frac{x}{5}\left( 1+\frac{x}{6}\left( 1+\frac{x}{7}\left( 1+\frac{x}{8}\left( 1+\frac{x}{9}\left( 1+\frac{x}{10}\right) \right) \right) \right) \right) \right) \right) \right) \right)\nonumber 
+	\end{align}
+	On figure 1, both the implementation above and the built-in exponential function from the math.h library are plotted alongside eachother. 
+	The two plots are nearly indistinguishable. Here is the C-code:
+	\lstinputlisting[language=C,frame=single]{main.c}
+	
+	In the code above, simple identites for the exponential function are used for purposes explained in the next section.
+		 
+	\begin{figure}[h]
+		\center
+		\includegraphics{fig-pyxplot.pdf}
+		\caption{This is a plot of the exponential function from two implementations.}
+	\end{figure}
+
+	\section{B: Numerical advantage}
+	There is a numerical advantage of using the above implementation rather than simply using the Taylor series. The indentity
+	\begin{equation}\exp x=\frac{1}{\exp (-x)} \end{equation} is used for negative values of $x$ to ensures that only positive
+	 numbers are added together, while the convolution ensures that numbers of the same orders are added together. Since the 10th
+	partial sum only works well for relatively small $x$, the identity 
+	\begin{equation}\exp x = \exp (x/2) \cdot \exp (x/2)\end{equation}
+	is used iteratively until the argument of the exponential function is small enough. 
+	
+\end{document}
+
