@@ -1,0 +1,32 @@
+1. How do you search your man-pages for a given keyword? Hint: man man|less +/keyword -j.5
+	Use the hint. Insert any word instead of keyword. -j specifies the jump-target line. Less is a program which is goodfor reading "large" files like the man-pages. grep is also useful. 
+
+2. Suppose you need to type the command basename. Which characters do you need to type in your system before command-line completion can complete your typing?
+	"basen"
+
+3. In many systems command-line completion can also complete long options to many POSIX utilities. Does your shell completes long options? Suppose you need to type the command mkdir --parents. Which characters do you need to actually type when using command-line completion?
+	Yes, it does. You have to type "mkdir --p".
+
+4. How do you create a folder with a subfolder (say prog/hello)? Hint: man mkdir | grep -B1 "make parent".
+	mkdir -p prog/hello 		(when prog is in current directory)
+
+5. Which option instructs the rm command to ask the user for a confirmation before every removal? Hint: man rm|grep "prompt before".
+	-i
+
+6. Which option instructs the rm command to remove a folder with all subfolders? Hint: man rm|grep -B1 "remove directories".
+	-r
+	
+7. Which unix command lists the files in a directory in one column sorted by modification time with the newest last?
+	history
+
+8. What do symbols ., .., ~ mean in the context of the unix file utilities?
+	.	current directory
+	..	parent directory
+	~	home directory
+
+9. Where will the command cd without any arguments lead you?
+	to the home directory 
+
+10. What is your home directory? Name also alternative notations.
+	$HOME, "home/USERNAME"
+ 

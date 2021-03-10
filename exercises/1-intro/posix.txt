@@ -15,12 +15,20 @@
 		Done!
     D. Learn the following commands (file utilities) from the GNU Core Utilities: cp, ls, mkdir, mv, rm, and the bash built-in command cd.
     Hints: type, for example, man cp in your terminal; Google-search "man cp".
-		cp [OPTIONS] SOURCE ... DESTINATION	(... represents more files. Options can be looked up)
-		ls 					(lists files and folders in current directory)
-		
-    Read about the command-line completion.
-    Install your favourite text editor. If you don't have one, install the Nano text editor with the command
+		cp 		(copies files)
+		ls 		(lists files and folders in current directory)
+		mkdir 		(makes directory)
+		mv 		(moves files)
+		rm 		(removes files)
+		cd 		(changes directory)
+    E. Read about the command-line completion.
+		One can use TAB to complete typing in terminal. Pretty cool.
+    F. Install your favourite text editor. If you don't have one, install the Nano text editor with the command
     sudo apt install nano
-    Install also the vim editor, sudo apt install vim, should you ever want me to look at your files.
-    Learn to create, save, and edit text files with your favourite text editor.
-    Answer questions-intro. 
+		Done!
+    G. Install also the vim editor, sudo apt install vim, should you ever want me to look at your files.
+		Done!
+    H. Learn to create, save, and edit text files with your favourite text editor.
+		Done!
+    I. Answer questions-intro.
+		Done in file questions-intro.txt. 
