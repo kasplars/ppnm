@@ -1,0 +1,26 @@
+
+    A. Get yourself an access to a POSIX system. There are several options:
+        Ubuntu. Install it either directly on your laptop (the default and supported option) or in a virtual machine (VirtualBox is a popular hypervisor). The latest long term support version of Ubuntu is 20.04.
+        Most of other Linux-based systems like Debian or Fedora (but not Android) will do just as well. Some minor details might differ from Ubuntu.
+        MacOS with homebrew. Some details are different from Ubuntu.
+        Microsoft Windows with Windows Subsystem for Linux. You can apparently install Ubuntu from Windows-App-Store and run it as an app within your Windows box. Here is the manual from Microsoft: [https://docs.microsoft.com/en-us/windows/wsl/].
+        Microsoft Windows with Cygwin. Cygwin should also work on older (and 32-bit) versions of Windows.
+        Android with termux. No csharp in its repository though.
+        An account on a POSIX server and a laptop to ssh to your account. You might need to manually install some packages though. 
+		Done!
+    B. Learn how to start a terminal in your POSIX system. Here is a tutorial for Ubuntu.
+		CTRL + ALT + T
+    C. Read about the man utility. Run man man and read the description of the utility in your system.
+    Hints: man usually uses less as the default pager; you quit from less by pressing the q-key.
+		Done!
+    D. Learn the following commands (file utilities) from the GNU Core Utilities: cp, ls, mkdir, mv, rm, and the bash built-in command cd.
+    Hints: type, for example, man cp in your terminal; Google-search "man cp".
+		cp [OPTIONS] SOURCE ... DESTINATION	(... represents more files. Options can be looked up)
+		ls 					(lists files and folders in current directory)
+		
+    Read about the command-line completion.
+    Install your favourite text editor. If you don't have one, install the Nano text editor with the command
+    sudo apt install nano
+    Install also the vim editor, sudo apt install vim, should you ever want me to look at your files.
+    Learn to create, save, and edit text files with your favourite text editor.
+    Answer questions-intro. 
