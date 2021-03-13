@@ -29,7 +29,7 @@ double linterp_integ(int n, gsl_vector * x, gsl_vector * y, double z) {
 	int j = binsearch(n,x,z);
 	// printf("%i",j);
 	double sum = 0, dy, dx, x1, x2, y1, y2;
-	for (int i = 0; i-1<j; i++) {
+	for (int i = 0; i<j; i++) {
 		x1 = gsl_vector_get(x,i), x2 = gsl_vector_get(x,i+1);
 		y1 = gsl_vector_get(y,i), y2 = gsl_vector_get(y,i+1);
 		dy=y2-y1, dx=x2-x1;
@@ -66,7 +66,7 @@ int main(){
 	printf("Integration of f(z) on interval [%g,%g]. Check: %g\n",xmin,z,linterp_integ(n,x,y,z));
 
 	FILE* outlspline = fopen("outlspline.txt","w");
-	FILE* outinteg = fopen("outinteg.txt","w");
+	FILE* outinteg = fopen("outlinteg.txt","w");
 	gsl_interp * linear = gsl_interp_alloc(gsl_interp_linear,n);
 	gsl_interp_init(linear,xs,ys,n);
 
