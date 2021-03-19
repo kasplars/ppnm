@@ -75,6 +75,38 @@ void GS_decomp(gsl_matrix * A, gsl_matrix * R) {
 	}
 }
 
+void measuretime(int Nmax){
+	FILE * outmeasuretime = fopen("outtime.txt","w");
+
+	for (int i = 0; i < Nmax; i++) {
+		gsl_matrix * A = gsl_matrix_alloc(i,i);
+		gsl_matrix * R = gsl_matrix_alloc(i,i);
+		gsl_matrix * A_copy = gsl_matrix_alloc(i,i);
+		gsl_vector * tau = gsl_vector_alloc(i);
+		randomizer_matrix(A,50);
+		gsl_matrix_memcpy(A_copy,A);
+
+		clock_t tic = clock();
+			GS_decomp(A,R);
+		clock_t toc = clock();
+		clock_t ticgsl = clock();
+			gsl_linalg_QR_decomp(A_copy,tau);
+		clock_t tocgsl = clock();
+
+		double myTime = (double)(toc-tic) / CLOCKS_PER_SEC;
+		double gslTime = (double)(tocgsl-ticgsl) / CLOCKS_PER_SEC;
+
+		fprintf(outmeasuretime,"%i %10g %10g\n",i,myTime,gslTime);
+
+		gsl_matrix_free(A);
+		gsl_matrix_free(R);
+		gsl_matrix_free(A_copy);
+		gsl_vector_free(tau);
+	}
+
+	fclose(outmeasuretime);
+}
+
 void backsub(gsl_matrix * U, gsl_vector * c) {
 	for(int i=c->size-1; i>=0; i--) {
 		double s=gsl_vector_get(c,i);
@@ -88,13 +120,28 @@ void GS_solve(gsl_matrix* Q, gsl_matrix* R, gsl_vector* b, gsl_vector* x) {
 	backsub(R,x);
 }
 
+void GS_inverse(gsl_matrix * Q, gsl_matrix * R, gsl_matrix * B) {
+	gsl_vector * x = gsl_vector_alloc(B->size1);
+	gsl_vector * b = gsl_vector_alloc(B->size1);
+
+	for (int i = 0;  i<B->size1; i++) {
+		gsl_vector_set_basis(b,i);
+		GS_solve(Q,R,b,x);
+		for (int j = 0; j<B->size1; j++) {
+			gsl_matrix_set(B,j,i,gsl_vector_get(x,j));
+		}
+	}
+	gsl_vector_free(x);
+	gsl_vector_free(b);
+}
+
 int main() {
 	srand(time(NULL));
 	// PART 1
 
 	int n = 8, m = 6;
 
-	printf("------------------------\nPart 1\n\n");
+	printf("------------------------\nPart A1\n\n");
 
 	gsl_matrix * A = gsl_matrix_alloc(n,m);
 	gsl_matrix * R = gsl_matrix_alloc(m,m);
@@ -126,11 +173,12 @@ int main() {
 	gsl_matrix_free(R);
 
 	// PART 2
-	printf("\n\n------------------------\nPart 2\n\n");
+	printf("\n\n------------------------\nPart A2\n\n");
 
 	n = 8;
 
 	gsl_matrix * S = gsl_matrix_alloc(n,n);
+	gsl_matrix * S_inv = gsl_matrix_alloc(n,n);
 	gsl_matrix * S_orthogonal = gsl_matrix_alloc(n,n);
 	gsl_vector * b = gsl_vector_alloc(n);
 	gsl_matrix * T = gsl_matrix_alloc(n,n);
@@ -142,7 +190,7 @@ int main() {
 	randomizer_vector(b,30);
 	matrix_print("The random matrix S = ",S);
 	printf("\n");
-	vector_print("The random vetor b = ",b);
+	vector_print("The random vector b = ",b);
 	printf("\n");
 
 	// QR-decomposition
@@ -160,10 +208,33 @@ int main() {
 	vector_print("Check if Sx=b for solution of QRx=b",b);
 	printf("\n");
 
+	printf("\n------------------------\nPart B\n\n");	
+
+
+	// Part 2
+	// Calculate inverse of S
+	GS_inverse(S_orthogonal,T,S_inv);
+
+	matrix_print("The inverse inverse of S is found to be ",S_inv); printf("\n");
+
+	gsl_matrix * I = gsl_matrix_alloc(n,n);
+	gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,1,S,S_inv,0,I);
+	matrix_print("Check that S * S^-1=I",I); printf("\n");
+	gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,1,S_inv,S,0,I);
+	matrix_print("Check that S^-1 * S=I",I);
+	gsl_matrix_free(I);
+	printf("\n");
+
 	gsl_matrix_free(S);
+	gsl_matrix_free(S_inv);
 	gsl_matrix_free(S_orthogonal);
 	gsl_vector_free(x);
 	gsl_vector_free(b);
 	gsl_matrix_free(T);
+
+
+	// Part 3
+	measuretime(300);
+
 return 0;
 }
