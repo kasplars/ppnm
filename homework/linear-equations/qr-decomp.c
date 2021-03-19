@@ -78,7 +78,7 @@ void GS_decomp(gsl_matrix * A, gsl_matrix * R) {
 void measuretime(int Nmax){
 	FILE * outmeasuretime = fopen("outtime.txt","w");
 
-	for (int i = 0; i < Nmax; i++) {
+	for (int i = Nmax/2; i < Nmax; i++) {
 		gsl_matrix * A = gsl_matrix_alloc(i,i);
 		gsl_matrix * R = gsl_matrix_alloc(i,i);
 		gsl_matrix * A_copy = gsl_matrix_alloc(i,i);
@@ -96,7 +96,7 @@ void measuretime(int Nmax){
 		double myTime = (double)(toc-tic) / CLOCKS_PER_SEC;
 		double gslTime = (double)(tocgsl-ticgsl) / CLOCKS_PER_SEC;
 
-		fprintf(outmeasuretime,"%i %10g %10g\n",i,myTime,gslTime);
+		fprintf(outmeasuretime,"%i %10g %10g\n",i,myTime/pow(i,3),gslTime/pow(i,3));
 
 		gsl_matrix_free(A);
 		gsl_matrix_free(R);
