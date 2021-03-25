@@ -13,7 +13,8 @@
 #define TRACE(...)
 #endif
 
-void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy, gsl_vector * c,double (*f)(double, int),int m) {
+void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy,
+	gsl_vector * c,double (*f)(double, int),int m,gsl_matrix * S) {
 	TRACE("0LS\n");
 	int n = x->size;
 	gsl_matrix * A = gsl_matrix_alloc(n,m);
@@ -34,6 +35,15 @@ void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy, gsl_vector * c,do
 	backsub(R,c);
 	TRACE("4LS\n");
 
+	// Covariance matrix
+	gsl_matrix * R_inv = gsl_matrix_alloc(m,m);
+	gsl_matrix * I = gsl_matrix_alloc(m,m);
+	gsl_matrix_set_identity(I);
+	GS_inverse(I,R,R_inv);
+	gsl_blas_dgemm(CblasNoTrans,CblasTrans,1,R_inv,R_inv,0,S);
+
+	gsl_matrix_free(I);
+	gsl_matrix_free(R_inv);
 	gsl_matrix_free(A);
 	gsl_matrix_free(R);
 	gsl_vector_free(b);
@@ -87,6 +97,7 @@ int main() {
 	gsl_vector * y=gsl_vector_alloc(lof);
 	gsl_vector * dy=gsl_vector_alloc(lof);
 	gsl_vector * c = gsl_vector_alloc(m);
+	gsl_matrix * S = gsl_matrix_alloc(m,m);
 
 	for (int index = 0; index < lof; index++) {
 		if(fscanf(inputstream,"%lg %lg %lg",&doublex,&doubley,&doubledy)); // to ignore warning;
@@ -103,8 +114,9 @@ int main() {
 	vector_print("log(y)=",y);
 	vector_print("dlog(y)=",dy);
 
-	least_sq(x,y,dy,c,f,m);
+	least_sq(x,y,dy,c,f,m,S);
 	vector_print("c =",c);
+	matrix_print("The covariance matrix S =",S);
 
 	int datapoints = 200;
 	double xmin = 0, xmax = 16;
@@ -126,14 +138,14 @@ int main() {
 		fprintf(plottingdata,"%10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i));
 	}
 
-	printf("The halflife of ThX is %g days. The modern value is approximately 3.6 days.\n",-log(2)/gsl_vector_get(c,1));
-
+	printf("The halflife of ThX is %g +- %g days. The modern value is approximately 3.6 days, so it is somewhat outside the expectation.\n",-log(2)/gsl_vector_get(c,1),log(2)/pow(gsl_vector_get(c,1),2)*sqrt(gsl_matrix_get(S,1,1)));
 	gsl_vector_free(x);
 	gsl_vector_free(y);
 	gsl_vector_free(dy);
 	gsl_vector_free(c);
 	gsl_vector_free(xs);
 	gsl_vector_free(ys);
+	gsl_matrix_free(S);
 
 	fclose(plottingdata);
 	fclose(inputstream);

@@ -23,6 +23,8 @@ olsplot.pyxplot.png: plottingdata.txt Makefile
 	,"$<" using 3:4:5 with yerrorbars title "Data"\
 	'| pyxplot
 
+plottingdata.txt: main
+
 out.txt: main
 
 errors.txt: main

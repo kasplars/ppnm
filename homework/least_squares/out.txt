@@ -51,4 +51,7 @@ dlog(y)=
 c =
 [   4.92999] 
 [ -0.169981] 
-The halflife of ThX is 4.0778 days. The modern value is approximately 3.6 days.
+The covariance matrix S =
+[0.000862541 -8.4885e-05 ]
+[-8.4885e-05 1.2322e-05 ]
+The halflife of ThX is 4.0778 +- 0.0842108 days. The modern value is approximately 3.6 days, so it is somewhat outside the expectation.
