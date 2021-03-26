@@ -1,3 +1,12 @@
+#include <stdio.h>
+#include <math.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_linalg.h>
+#include "auxfile.h"
+#include <assert.h>
+
 void backsub(gsl_matrix * U, gsl_vector * c) {
 	for(int i=c->size-1; i>=0; i--) {
 		double s=gsl_vector_get(c,i);

@@ -31,7 +31,9 @@ out.txt: main
 
 errors.txt: main
 
+main: auxfile.o
+
 .PHONEY: clean
 
 clean:
-	$(RM) main errors.txt plottingdata.txt
+	$(RM) main *.o errors.txt plottingdata.txt
