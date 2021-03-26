@@ -81,7 +81,6 @@ double f(double x, int i) {
 }
 
 int main() {
-	TRACE("0\n");
 	FILE* inputstream = fopen("input.txt","r");
 	int lof = numlines("input.txt");
 
