@@ -15,12 +15,10 @@
 
 void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy,
 	gsl_vector * c,double (*f)(double, int),int m,gsl_matrix * S) {
-	TRACE("0LS\n");
 	int n = x->size;
 	gsl_matrix * A = gsl_matrix_alloc(n,m);
 	gsl_matrix * R = gsl_matrix_alloc(m,m);
 	gsl_vector * b = gsl_vector_alloc(n);
-	TRACE("1LS\n");
 	for (int i=0; i<n; i++) {
 		gsl_vector_set(b,i,gsl_vector_get(y,i)/gsl_vector_get(dy,i));
 		for (int j=0; j<m; j++) {
@@ -29,11 +27,8 @@ void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy,
 	}
 
 	GS_decomp(A,R);
-	TRACE("2LS\n");
 	gsl_blas_dgemv(CblasTrans,1,A,b,0,c);
-	TRACE("3LS\n");
 	backsub(R,c);
-	TRACE("4LS\n");
 
 	// Covariance matrix
 	gsl_matrix * R_inv = gsl_matrix_alloc(m,m);
@@ -123,28 +118,41 @@ int main() {
 
 	gsl_vector * xs = gsl_vector_alloc(datapoints);
 	gsl_vector * ys = gsl_vector_alloc(datapoints);
+	gsl_vector * yspc = gsl_vector_alloc(datapoints);
+	gsl_vector * ysmc = gsl_vector_alloc(datapoints);
+
 
 	FILE* plottingdata = fopen("plottingdata.txt","w");
 
 	for(int i=0; i<lof; i++) {
 		gsl_vector_set(xs,i,(xmax-xmin)*i/(datapoints-1));
 		gsl_vector_set(ys,i,gsl_vector_get(c,0)+gsl_vector_get(xs,i)*gsl_vector_get(c,1));
-		fprintf(plottingdata,"%10g %10g %10g %10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i),
-			gsl_vector_get(x,i),gsl_vector_get(y,i),gsl_vector_get(dy,i));
+		gsl_vector_set(yspc,i,gsl_vector_get(c,0)+sqrt(gsl_matrix_get(S,0,0))+gsl_vector_get(xs,i)*(gsl_vector_get(c,1)+sqrt(gsl_matrix_get(S,1,1))));
+		gsl_vector_set(ysmc,i,gsl_vector_get(c,0)-sqrt(gsl_matrix_get(S,0,0))+gsl_vector_get(xs,i)*(gsl_vector_get(c,1)-sqrt(gsl_matrix_get(S,1,1))));
+		fprintf(plottingdata,"%10g %10g %10g %10g %10g %10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i),gsl_vector_get(yspc,i),
+		gsl_vector_get(ysmc,i),gsl_vector_get(x,i),gsl_vector_get(y,i),gsl_vector_get(dy,i));
 	}
 	for(int i=lof; i<datapoints; i++) {
 		gsl_vector_set(xs,i,(xmax-xmin)*i/(datapoints-1));
 		gsl_vector_set(ys,i,gsl_vector_get(c,0)+gsl_vector_get(xs,i)*gsl_vector_get(c,1));
-		fprintf(plottingdata,"%10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i));
+		gsl_vector_set(yspc,i,gsl_vector_get(c,0)+sqrt(gsl_matrix_get(S,0,0))+gsl_vector_get(xs,i)*(gsl_vector_get(c,1)+sqrt(gsl_matrix_get(S,1,1))));
+		gsl_vector_set(ysmc,i,gsl_vector_get(c,0)-sqrt(gsl_matrix_get(S,0,0))+gsl_vector_get(xs,i)*(gsl_vector_get(c,1)-sqrt(gsl_matrix_get(S,1,1))));
+		fprintf(plottingdata,"%10g %10g %10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i),gsl_vector_get(yspc,i),
+		gsl_vector_get(ysmc,i));
 	}
 
 	printf("The halflife of ThX is %g +- %g days. The modern value is approximately 3.6 days, so it is somewhat outside the expectation.\n",-log(2)/gsl_vector_get(c,1),log(2)/pow(gsl_vector_get(c,1),2)*sqrt(gsl_matrix_get(S,1,1)));
+
+	
+
 	gsl_vector_free(x);
 	gsl_vector_free(y);
 	gsl_vector_free(dy);
 	gsl_vector_free(c);
 	gsl_vector_free(xs);
 	gsl_vector_free(ys);
+	gsl_vector_free(yspc);
+	gsl_vector_free(ysmc);
 	gsl_matrix_free(S);
 
 	fclose(plottingdata);

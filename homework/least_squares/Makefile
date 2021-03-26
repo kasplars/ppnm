@@ -9,7 +9,7 @@ default: out.txt errors.txt olsplot.pyxplot.png
 	cat out.txt
 	cat errors.txt
 
-olsplot.pyxplot.png: plottingdata.txt Makefile
+olsplot.pyxplot.png: plottingdata.txt Makefile #needs to be run twice to update
 	echo '\
 	set terminal png;\
 	set output "$@";\
@@ -19,8 +19,10 @@ olsplot.pyxplot.png: plottingdata.txt Makefile
 	set ylabel ("log(activity), rel. units");\
 	set title "OLS";\
 	plot \
-	 "$<" using 1:2 with line title "OLS"\
-	,"$<" using 3:4:5 with yerrorbars title "Data"\
+	 "$<" using 1:2 with line title "Fit"\
+	,"$<" using 1:3 with color black line lw 0.5 lt 2 title "Fit uncertainty"\
+	,"$<" using 1:4 with color black line lw 0.5 lt 2 title ""\
+	,"$<" using 5:6:7 with yerrorbars title "Data"\
 	'| pyxplot
 
 plottingdata.txt: main
