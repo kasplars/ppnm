@@ -51,7 +51,8 @@ return num;
 
 void jacobi_diag(gsl_matrix * A,gsl_matrix * V) {
 	int n = A->size1; gsl_matrix_set_identity(V);
-	double threshold = 10000*LDBL_EPSILON;
+	// double threshold = 10000*LDBL_EPSILON;
+	double threshold = 10000000000*LDBL_EPSILON;
 	do {
 		for(int p=0;p<n-1;p++) {
 			for(int q=p+1;q<n;q++){
@@ -87,6 +88,8 @@ void gen_rel_sym(gsl_matrix * S,double range) {
 
 
 int main() {
+	// Part A
+
 	int n = 5;
 	gsl_matrix * S = gsl_matrix_alloc(n,n);
 	gsl_matrix * V = gsl_matrix_alloc(n,n);
@@ -111,10 +114,62 @@ int main() {
 	matrix_print("Check that V^T*V = 1: ",temp);
 
 	gsl_matrix_free(S);
-	gsl_matrix_free(V);
 	gsl_matrix_free(vdvt);
 	gsl_matrix_free(D);
+	gsl_matrix_free(V);
 	gsl_matrix_free(vtsv);
 	gsl_matrix_free(temp);
+
+	// Part B
+
+	n=200;
+	double s=1.0/(n+1);
+	gsl_matrix * H = gsl_matrix_alloc(n,n);
+	gsl_matrix * B = gsl_matrix_alloc(n,n);
+	for(int i=0;i<n-1;i++){
+  		gsl_matrix_set(H,i,i,-2);
+		gsl_matrix_set(H,i,i+1,1);
+		gsl_matrix_set(H,i+1,i,1);
+  	}
+	gsl_matrix_set(H,n-1,n-1,-2);
+	gsl_matrix_scale(H,-pow(s,-2));
+
+	// matrix_print("H = ",H);
+
+	jacobi_diag(H,B);
+
+	FILE * quantumenergyout = fopen("quantumenergyout.txt","w");
+
+	for (int k=0; k < n; k++){
+    		double exact = M_PI*M_PI*(k+1)*(k+1);
+    		double calculated = gsl_matrix_get(H,k,k);
+    		fprintf(quantumenergyout,"%i %g %g\n",k,calculated,exact);
+	}
+
+	fclose(quantumenergyout);
+
+	FILE * eigenfuncs = fopen("eigenfuncs.txt","w");
+
+	int flip[3] = {-1, -1, 1};	// we flip the sign of the eigenfunctions, since the jacobi procedure
+					// has flipped their signs
+	for(int k=0;k<3;k++){
+		fprintf(eigenfuncs,"#INDEX %i\n",k);
+  		fprintf(eigenfuncs,"%g %g %g\n",0.0,0.0,0.0);
+  		for(int i=0;i<n;i++) {
+			double xis = (i+1.0)/(n+1);
+			double c = 1.0/sqrt(s);		// For every eigenvector u=(u0,u2,...), u^T*u = 1. But in our case, we must
+							// normalize the eigenvectors such that the Riemann sum |u0|^2*s+|u1|^2*s+...=1.
+							// Therefore we must multiply the vectors by c.
+			fprintf(eigenfuncs,"%g %g %g\n",xis,c*flip[k]*gsl_matrix_get(B,i,k),
+			sqrt(2)*sin((k+1)*M_PI*xis));
+		}
+  		fprintf(eigenfuncs,"%g %g %g\n\n\n",1.0,0.0,0.0);
+  	}
+
+	fclose(eigenfuncs);
+
+	gsl_matrix_free(H);
+	gsl_matrix_free(B);
+
 return 0;
 }
