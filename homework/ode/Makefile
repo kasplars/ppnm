@@ -3,7 +3,7 @@ CFLAGS = -Wall -O -std=gnu11 -DNDEBUG
 CFLAGS += $(shell /usr/bin/gsl-config --cflags)
 LDLIBS += $(shell /usr/bin/gsl-config --libs)
 
-default: out.txt errors.txt shm.pdf sir.pdf threebody.png
+default: out.txt errors.txt shm.png sir0.png threebody.png
 
 out.txt: main
 	./$< 1> $@
@@ -13,9 +13,9 @@ errors.txt: main
 
 main: library.o
 
-shm.pdf: shm.txt Makefile
+shm.png: shm.txt Makefile
 	echo '\
-	set terminal pdf;\
+	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
@@ -27,15 +27,15 @@ shm.pdf: shm.txt Makefile
 	,"$<" using 1:3 with line lt 2 title "$$y^\prime$$ "\
 	'| pyxplot
 
-sir.pdf: sir.txt Makefile
+sir0.png: sir.txt Makefile
 	echo '\
-	set terminal pdf;\
+	set terminal png;\
 	set output "$@";\
 	set key outside;\
 	set tics out;\
 	set xlabel "$$t$$";\
 	set ylabel "Number";\
-	set title "SIR-model";\
+	set title "SIR-model: $$T_c = 1.5, T_r = 20$$";\
 	plot \
 	 "$<" using 1:2 with line lt 1 title "$$S$$"\
 	,"$<" using 1:3 with line lt 2 title "$$I$$ "\

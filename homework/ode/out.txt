@@ -3,10 +3,16 @@ Vector output from simple harmonic motion:
 [   0.54204] 
 Number of steps: 7117
 SIR model vector output:
-[   35.7613] 
-[   2.75202] 
-[   10071.5] 
-Number of steps: 4762
+[ 0.0187661] 
+[  0.929325] 
+[   10109.1] 
+Number of steps: 6739
+
+
+Clearly, sir0.png through sir3.png show that - among other things - the maximum number of infected
+people decreases with increasing Tc.
+
+
 Three body vector output:
 [  0.536014] 
 [   0.54225] 

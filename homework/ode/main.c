@@ -19,7 +19,7 @@ void shm(double t, gsl_vector * y, gsl_vector * dydt) {
 }
 
 void sir(double t,gsl_vector * y, gsl_vector * dydt) {
-	double Tc = 3.5, Tr = 20.0;
+	double Tc = 1.5, Tr = 20.0;
 	double N;
 
 	double S = gsl_vector_get(y,0), I = gsl_vector_get(y,1), R = gsl_vector_get(y,2);
@@ -225,7 +225,7 @@ int main(){
 	a = 0; b = 200;
 	int sirsteps = driver(sirstream,sir,n,a,ysir,b,dydtsir,h,acc,eps);
 	vector_print("SIR model vector output:",dydtsir); printf("Number of steps: %i\n",sirsteps);
-
+	printf("\n\nClearly, sir0.png through sir3.png show that - among other things - the maximum number of infected\npeople decreases with increasing Tc.\n\n\n");
 	fclose(sirstream);
 
 	gsl_vector_free(ysir);
