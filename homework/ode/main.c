@@ -29,6 +29,32 @@ void sir(double t,gsl_vector * y, gsl_vector * dydt) {
 	gsl_vector_set(dydt,2,I/Tr);
 }
 
+void threebody(double t, gsl_vector * y, gsl_vector * dydt) {
+	double G = 1.0, m0 = 1.0, m1 = 1.0, m2 = 1.0, Gm0 = G*m0, Gm1 = G*m1, Gm2 = G*m2;
+	// y = {x0, x1, x2, y0, y1, y2, vx0, vx1, vx2, vy0, vy1, vy2};
+	double x0 = gsl_vector_get(y,0), x1 = gsl_vector_get(y,1), x2 = gsl_vector_get(y,2), y0 = gsl_vector_get(y,3), y1 = gsl_vector_get(y,4), y2 = gsl_vector_get(y,5),
+			vx0 = gsl_vector_get(y,6), vx1 = gsl_vector_get(y,7), vx2 = gsl_vector_get(y,8), vy0 = gsl_vector_get(y,9), vy1 = gsl_vector_get(y,10), vy2 = gsl_vector_get(y,11);
+	double x01 = x0-x1, x02 = x0-x2, x12 = x1-x2, x10 = -x01, x20 = -x02, x21 = -x12;
+	double y01 = y0-y1, y02 = y0-y2, y12 = y1-y2, y10 = -y01, y20 = -y02, y21 = -y12;
+	double nrmcube01 = pow(sqrt(pow(x01,2)+pow(y01,2)),3);
+	double nrmcube02 = pow(sqrt(pow(x02,2)+pow(y02,2)),3);
+	double nrmcube12 = pow(sqrt(pow(x12,2)+pow(y12,2)),3);
+
+	// dydt = {vx0, vx1, vx2, vy0, vy1, vy2, ax0, ax1, ax2, ay0, ay1, ay2};
+	gsl_vector_set(dydt,0,vx0);
+	gsl_vector_set(dydt,1,vx1);
+	gsl_vector_set(dydt,2,vx2);
+	gsl_vector_set(dydt,3,vy0);
+	gsl_vector_set(dydt,4,vy1);
+	gsl_vector_set(dydt,5,vy2);
+	gsl_vector_set(dydt,6,-Gm1*x01/nrmcube01 - Gm2*x02/nrmcube02);
+	gsl_vector_set(dydt,7,-Gm2*x12/nrmcube12 - Gm0*x10/nrmcube01);
+	gsl_vector_set(dydt,8,-Gm0*x20/nrmcube02 - Gm2*x21/nrmcube12);
+	gsl_vector_set(dydt,9,-Gm1*y01/nrmcube01 - Gm2*y02/nrmcube02);
+	gsl_vector_set(dydt,10,-Gm2*y12/nrmcube12 - Gm0*y10/nrmcube01);
+	gsl_vector_set(dydt,11,-Gm0*y20/nrmcube02 - Gm2*y21/nrmcube12);
+}
+
 void rkstep45(void (*f)(double, gsl_vector *, gsl_vector *), /* the f from dy/dt=f(t,y) */
 	int n,				/* step number	*/
 	double t,              		/* the current value of the variable */
@@ -100,6 +126,27 @@ void odeprint(FILE * output,double x, gsl_vector * y) {
 	if (n == 6) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
 								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
 								gsl_vector_get(y,5));
+	if (n == 7) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6));
+	if (n == 8) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7));
+	if (n == 9) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8));
+	if (n == 10) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9));
+	if (n == 11) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9),gsl_vector_get(y,10));
+	if (n == 12) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9),gsl_vector_get(y,10),gsl_vector_get(y,11));
 }
 
 int driver(FILE * outstream,void (*f)(double t, gsl_vector * y,gsl_vector * dydt), /* right-hand-side of dy/dt=f(t,y) */
@@ -113,22 +160,24 @@ int driver(FILE * outstream,void (*f)(double t, gsl_vector * y,gsl_vector * dydt
 	double eps                    /* relative accuracy goal */
 ){
 	double x = a, ei, normy, s, taui;
-	if (x+h>b) h = b-x;
 
 	int i, k = 0;
-	TRACE("Before vector init\n");
+	int max = 1e6;
+
+TRACE("Before vector init\n");
 	gsl_vector * dy = gsl_vector_alloc(n);
 	TRACE("After vector init\n");
 
 	while(x<b) {
+		if (x+h>b) h = b-x;
 		TRACE("Before rkstep\n");
-		rkstep45(f,n,x,ya,h,yb,dy); k++;
+		rkstep45(f,n,x,ya,h,yb,dy);
 		TRACE("After rkstep\n");
 		s=0; for (i=0; i<n; i++) s+=pow(gsl_vector_get(dy,i),2); ei = sqrt(s);
 		s=0; for (i=0; i<n; i++) s+=pow(gsl_vector_get(yb,i),2); normy = sqrt(s);
 		taui = (normy*eps+acc)*sqrt(h/(b-a));
 		if (ei<taui){
-			x += h; for(i=0;i<n;i++) {gsl_vector_memcpy(ya,yb); odeprint(outstream,x,yb);}
+			x += h; k++; if (k>max-1) return k; for(i=0;i<n;i++) {gsl_vector_memcpy(ya,yb);} odeprint(outstream,x,yb);
 		} if (ei>0) h*=pow(taui/ei,0.25)*0.95; else h*=2;
 	}
 
@@ -137,18 +186,20 @@ int driver(FILE * outstream,void (*f)(double t, gsl_vector * y,gsl_vector * dydt
 }
 
 int main(){
+	// SHM
+
 	int n = 2;
 	gsl_vector * ya = gsl_vector_alloc(2);
 	gsl_vector * yb = gsl_vector_alloc(2);
 
 	gsl_vector_set(ya,0,1); gsl_vector_set(ya,1,0);
 
-	double a = 0, b = 10;
-	double h = 0.002;
+	double a = 0.0, b = 10.0;
+	double h = 0.02;
 	double acc = 0.00001;
 	double eps = 0.00001;
 
-	FILE* outstream = fopen("ode-out.txt","w");
+	FILE* outstream = fopen("shm.txt","w");
 
 	int steps = driver(outstream,shm,n,a,ya,b,yb,h,acc,eps);
 	vector_print("yb=",yb); printf("Number of steps: %i\n",steps);
@@ -162,22 +213,53 @@ int main(){
 
 	n = 3;
 
-	gsl_vector * sirvec = gsl_vector_alloc(n);
-	gsl_vector * dsir = gsl_vector_alloc(n);
+	gsl_vector * ysir = gsl_vector_alloc(n);
+	gsl_vector * dydtsir = gsl_vector_alloc(n);
 
 	double sirvals[3] = {10000.0, 10.0, 100.0};
 
-	for (int i = 0; i<n; i++) gsl_vector_set(sirvec,i,sirvals[i]);
+	for (int i = 0; i<n; i++) gsl_vector_set(ysir,i,sirvals[i]);
 
 	FILE * sirstream = fopen("sir.txt","w");
 
 	a = 0; b = 200;
-	int sirsteps = driver(sirstream,sir,n,a,sirvec,b,dsir,h,acc,eps);
-	vector_print("dsir = ",dsir); printf("Number of steps: %i\n",sirsteps);
+	int sirsteps = driver(sirstream,sir,n,a,ysir,b,dydtsir,h,acc,eps);
+	vector_print("dsir = ",dydtsir); printf("Number of steps: %i\n",sirsteps);
 
 	fclose(sirstream);
 
-	gsl_vector_free(sirvec);
-	gsl_vector_free(dsir);
+	gsl_vector_free(ysir);
+	gsl_vector_free(dydtsir);
+
+	// 3-body
+
+	n = 12;
+
+	gsl_vector * ybody = gsl_vector_alloc(n);
+	gsl_vector * dydtbody = gsl_vector_alloc(n);
+
+	double threebodyvals[12] = {-0.97000436, 0.0, 0.97000436, 0.24308753, 0.0, -0.24308753,
+					0.4662036850, -0.93240737, 0.4662036850, 0.4323657300, -0.86473146, 0.4323657300};
+	//double threebodyvals[12] = {-0.9700, 0.0, 0.9700, 0.2430, 0.0, -0.2430,
+	//				0.4662, -0.9324, 0.4662, 0.4323, -0.8647, 0.4323};
+
+	for(int i = 0; i<n; i++) gsl_vector_set(ybody,i,threebodyvals[i]);
+
+	FILE * threebodystream = fopen("threebody.txt","w");
+
+	a = 0; b = 20;
+	h = 0.001;
+	acc = 1e-6;
+	eps = 1e-6;
+
+
+	int threebodysteps = driver(threebodystream,threebody,n,a,ybody,b,dydtbody,h,acc,eps);
+	vector_print("threebody vector = ",dydtbody); printf("Number of steps: %i\n",threebodysteps);
+
+	fclose(threebodystream);
+
+	gsl_vector_free(ybody);
+	gsl_vector_free(dydtbody);
+
 return 0;
 }
