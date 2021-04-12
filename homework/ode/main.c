@@ -247,7 +247,7 @@ int main(){
 
 	FILE * threebodystream = fopen("threebody.txt","w");
 
-	a = 0; b = 20;
+	a = 0; b = 10;
 	h = 0.001;
 	acc = 1e-6;
 	eps = 1e-6;
