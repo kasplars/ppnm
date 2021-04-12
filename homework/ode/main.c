@@ -202,7 +202,7 @@ int main(){
 	FILE* outstream = fopen("shm.txt","w");
 
 	int steps = driver(outstream,shm,n,a,ya,b,yb,h,acc,eps);
-	vector_print("yb=",yb); printf("Number of steps: %i\n",steps);
+	vector_print("Vector output from simple harmonic motion:",yb); printf("Number of steps: %i\n",steps);
 
 	fclose(outstream);
 
@@ -224,7 +224,7 @@ int main(){
 
 	a = 0; b = 200;
 	int sirsteps = driver(sirstream,sir,n,a,ysir,b,dydtsir,h,acc,eps);
-	vector_print("dsir = ",dydtsir); printf("Number of steps: %i\n",sirsteps);
+	vector_print("SIR model vector output:",dydtsir); printf("Number of steps: %i\n",sirsteps);
 
 	fclose(sirstream);
 
@@ -254,7 +254,7 @@ int main(){
 
 
 	int threebodysteps = driver(threebodystream,threebody,n,a,ybody,b,dydtbody,h,acc,eps);
-	vector_print("threebody vector = ",dydtbody); printf("Number of steps: %i\n",threebodysteps);
+	vector_print("Three body vector output:",dydtbody); printf("Number of steps: %i\n",threebodysteps);
 
 	fclose(threebodystream);
 

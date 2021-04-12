@@ -52,7 +52,7 @@ threebody.pdf: threebody.txt Makefile
 	set ylabel "$$y$$";\
 	set xrange [-1.5:1.5];\
 	set yrange [-1.5:1.5];\
-	set title "Three-body";\
+	set title "Three-body problem: 8-shape solution";\
 	plot \
 	 "$<" using 2:5 with line lt 1 title "Body 0"\
 	,"$<" using 3:6 with line lt 1 title "Body 1"\

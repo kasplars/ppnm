@@ -1,13 +1,13 @@
-yb=
+Vector output from simple harmonic motion:
 [ -0.836008] 
 [   0.54204] 
 Number of steps: 7117
-dsir = 
+SIR model vector output:
 [   35.7613] 
 [   2.75202] 
 [   10071.5] 
 Number of steps: 4762
-threebody vector = 
+Three body vector output:
 [  0.536014] 
 [   0.54225] 
 [  -1.07826] 
