@@ -3,7 +3,7 @@ CFLAGS = -Wall -O -std=gnu11 -DNDEBUG
 CFLAGS += $(shell /usr/bin/gsl-config --cflags)
 LDLIBS += $(shell /usr/bin/gsl-config --libs)
 
-default: out.txt errors.txt shm.pdf sir.pdf threebody.pdf
+default: out.txt errors.txt shm.pdf sir.pdf threebody.png
 
 out.txt: main
 	./$< 1> $@
@@ -42,9 +42,9 @@ sir.pdf: sir.txt Makefile
 	,"$<" using 1:4 with line lt 3 title "$$R$$ "\
 	'| pyxplot
 
-threebody.pdf: threebody.txt Makefile
+threebody.png: threebody.txt Makefile
 	echo '\
-	set terminal pdf;\
+	set terminal png;\
 	set output "$@";\
 	set key outside;\
 	set tics out;\
