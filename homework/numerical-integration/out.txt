@@ -1,0 +1,12 @@
+Integral of f(x) from 0 to 1 is 1.99952 not using Clenshaw-Curtis. Number of evaluations: 4272.
+Integral of f(x) from 0 to 1 is 1.9978 using Clenshaw-Curtis. Number of evaluations: 4.
+So there is a lot of improvement in numbers of evaluations.
+The integral of p(x) from 0 to 1 without and with Clenshaw-Curtis, respectively:
+3.14159265358979; number of evaluations: 11544; error: 3.10862446895044e-15
+3.14159265358994; number of evaluations: 9596; error: 1.4210854715202e-13
+We see that Clenshaw-Curtis takes more evaluations but is more accurate.
+QAGS from GSL library, the result, error and number of function evaluations are: 
+3.14159265358979
+3.53356455207177e-10
+231,
+respectively.
