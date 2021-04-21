@@ -1,0 +1,8 @@
+Volume of sphere of radius 0.5 using pseudo-Monte Carlo.
+Real volume = 0.52359878, calculated volume = 0.523617, calculated error = 0.00049944193. Number of points = 1000000
+
+
+Integral given in homework.
+Calculated volume = 1.3911627, calculated error = 0.0035757318. Number of points = 10000000
+
+
