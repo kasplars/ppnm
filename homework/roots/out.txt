@@ -1,0 +1,6 @@
+Root of x^3 = 3.47822e-05 within tolerance     0.0001
+
+Roots of the gradient of Rosenbrock function = 
+[         1] 
+[         1] 
+within tolerance      0.001
