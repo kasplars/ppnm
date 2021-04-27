@@ -163,3 +163,125 @@ void gen_rel_sym(gsl_matrix * S,double range) {
 		}
 	}
 }
+
+void rkstep45(void (*f)(double, gsl_vector *, gsl_vector *), /* the f from dy/dt=f(t,y) */
+	int n,				/* step number	*/
+	double t,              		/* the current value of the variable */
+	gsl_vector * yt,            	/* the current value y(t) of the sought function */
+	double h,              		/* the step to be taken */
+	gsl_vector * yh,             	/* output: y(t+h) */
+	gsl_vector * dy             	/* output: error estimate */
+){
+	int i;
+	gsl_vector * k1 = gsl_vector_alloc(n);
+	gsl_vector * k2 = gsl_vector_alloc(n);
+	gsl_vector * k3 = gsl_vector_alloc(n);
+	gsl_vector * k4 = gsl_vector_alloc(n);
+	gsl_vector * k5 = gsl_vector_alloc(n);
+	gsl_vector * k6 = gsl_vector_alloc(n);
+	gsl_vector * yn = gsl_vector_alloc(n);
+
+	double b[7] = {0.0, 16.0/135, 0.0, 6656.0/12825, 28561.0/56430, -9.0/50, 2.0/55};
+	double bstar[7] = {0.0, 25.0/216, 0.0, 1408.0/2565, 2197.0/4104, -1.0/5, 0.0};
+	double c[7] = {0.0, 0.0, 1.0/4, 3.0/8, 12.0/13, 1.0, 1.0/2};
+	double a1[7] = {0.0, 0.0, 1.0/4, 3.0/32, 1932.0/2197, 439.0/216, -8.0/27};
+	double a2[7] = {0.0, 0.0, 0.0, 9.0/32, -7200.0/2197, -8.0, 2.0};
+	double a3[7] = {0.0, 0.0, 0.0, 0.0, 7296.0/2197, 3680.0/513, -3544.0/2565};
+	double a4[7] = {0.0, 0.0, 0.0, 0.0, 0.0, -845.0/4104, 1859.0/4104};
+	double a5[7] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -11.0/40};
+
+	f(t,yt,k1);
+	for(i=0;i<n;i++) {gsl_vector_set(yn,i,gsl_vector_get(yt,i)+(a1[2]*gsl_vector_get(k1,i))*h);}
+	f(t+c[2]*h,yn,k2);
+	for(i=0;i<n;i++) {gsl_vector_set(yn,i,gsl_vector_get(yn,i)+(a1[3]*gsl_vector_get(k1,i)+a2[3]*gsl_vector_get(k2,i))*h);}
+	f(t+c[3]*h,yn,k3);
+	for(i=0;i<n;i++) {gsl_vector_set(yn,i,gsl_vector_get(yn,i)+(a1[4]*gsl_vector_get(k1,i)+a2[4]*gsl_vector_get(k2,i)+a3[4]*gsl_vector_get(k3,i))*h);}
+	f(t+c[4]*h,yn,k4);
+	for(i=0;i<n;i++) {gsl_vector_set(yn,i,gsl_vector_get(yn,i)+(a1[5]*gsl_vector_get(k1,i)+a2[5]*gsl_vector_get(k2,i)+a3[5]*gsl_vector_get(k3,i)+a4[5]*gsl_vector_get(k4,i))*h);}
+	f(t+c[5]*h,yn,k5);
+	for(i=0;i<n;i++) {gsl_vector_set(yh,i,gsl_vector_get(yn,i)+(a1[6]*gsl_vector_get(k1,i)+a2[6]*gsl_vector_get(k2,i)+a3[6]*gsl_vector_get(k3,i)+a4[6]*gsl_vector_get(k4,i)+a5[6]*gsl_vector_get(k5,i))*h);}
+	f(t+c[6]*h,yh,k6);
+	for(i=0;i<n;i++) {gsl_vector_set(yh,i,gsl_vector_get(yt,i)+(b[1]*gsl_vector_get(k1,i)
+				+b[2]*gsl_vector_get(k2,i)+b[3]*gsl_vector_get(k3,i)
+				+b[4]*gsl_vector_get(k4,i)+b[5]*gsl_vector_get(k5,i)+b[6]*gsl_vector_get(k6,i))*h);
+			gsl_vector_set(yn,i,gsl_vector_get(yt,i)+(bstar[1]*gsl_vector_get(k1,i)
+				+bstar[2]*gsl_vector_get(k2,i)+bstar[3]*gsl_vector_get(k3,i)
+				+bstar[4]*gsl_vector_get(k4,i)+bstar[5]*gsl_vector_get(k5,i)+bstar[6]*gsl_vector_get(k6,i))*h);
+			gsl_vector_set(dy,i,gsl_vector_get(yh,i)-gsl_vector_get(yn,i));
+	}
+
+	gsl_vector_free(k1);
+	gsl_vector_free(k2);
+	gsl_vector_free(k3);
+	gsl_vector_free(k4);
+	gsl_vector_free(k5);
+	gsl_vector_free(k6);
+	gsl_vector_free(yn);
+}
+
+void odeprint(FILE * output,double x, gsl_vector * y) {
+	int n = y->size;
+	if (n == 1) fprintf(output,"%10g %10g\n",x,gsl_vector_get(y,0));
+	if (n == 2) fprintf(output,"%10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1));
+	if (n == 3) fprintf(output,"%10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),gsl_vector_get(y,2));
+	if (n == 4) fprintf(output,"%10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),gsl_vector_get(y,2),
+								gsl_vector_get(y,3));
+	if (n == 5) fprintf(output,"%10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4));
+	if (n == 6) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5));
+	if (n == 7) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6));
+	if (n == 8) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7));
+	if (n == 9) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8));
+	if (n == 10) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9));
+	if (n == 11) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9),gsl_vector_get(y,10));
+	if (n == 12) fprintf(output,"%10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g %10g\n",x,gsl_vector_get(y,0),gsl_vector_get(y,1),
+								gsl_vector_get(y,2),gsl_vector_get(y,3),gsl_vector_get(y,4),
+								gsl_vector_get(y,5),gsl_vector_get(y,6),gsl_vector_get(y,7),gsl_vector_get(y,8),
+								gsl_vector_get(y,9),gsl_vector_get(y,10),gsl_vector_get(y,11));
+}
+
+int driver(FILE * outstream,void (*f)(double t, gsl_vector * y,gsl_vector * dydt), /* right-hand-side of dy/dt=f(t,y) */
+	int n,
+	double a,                     /* the start-point a */
+	gsl_vector * ya,                     /* y(a) */
+	double b,                     /* the end-point of the integration */
+	gsl_vector * yb,                     /* y(b) to be calculated */
+	double h,                     /* initial step-size */
+	double acc,                   /* absolute accuracy goal */
+	double eps                    /* relative accuracy goal */
+){
+	double x = a, ei, normy, s, taui;
+
+	int i, k = 0;
+	int max = 1e6;
+
+	gsl_vector * dy = gsl_vector_alloc(n);
+
+	while(x<b) {
+		if (x+h>b) h = b-x;
+		rkstep45(f,n,x,ya,h,yb,dy);
+		s=0; for (i=0; i<n; i++) s+=pow(gsl_vector_get(dy,i),2); ei = sqrt(s);
+		s=0; for (i=0; i<n; i++) s+=pow(gsl_vector_get(yb,i),2); normy = sqrt(s);
+		taui = (normy*eps+acc)*sqrt(h/(b-a));
+		if (ei<taui){
+			x += h; k++; if (k>max-1) return k; for(i=0;i<n;i++) {gsl_vector_memcpy(ya,yb);} odeprint(outstream,x,yb);
+		} if (ei>0) h*=pow(taui/ei,0.25)*0.95; else h*=2;
+	}
+
+	gsl_vector_free(dy);
+	return k;
+}

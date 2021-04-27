@@ -4,3 +4,8 @@ Roots of the gradient of Rosenbrock function =
 [         1] 
 [         1] 
 within tolerance      0.001
+
+Root of the M(epsilon) = 
+[ -0.500315] 
+within tolerance      0.001. This agrees well with the expected energy -1/2.
+

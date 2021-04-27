@@ -14,6 +14,8 @@
 #define TRACE(...)
 #endif
 
+static double epsilon;
+
 void f(gsl_vector * x, gsl_vector * fx) {
 	double scale = pow(0.001,-3);
 	double t, y;
@@ -34,6 +36,42 @@ void rosenbrockgrad(gsl_vector * t, gsl_vector * tx) {
 	grady = 200*(y-x*x);
 	gsl_vector_set(tx,0,gradx); gsl_vector_set(tx,1,grady);
 	gsl_vector_scale(tx,scale);	// remember to rescale problem!
+}
+
+void schroedinger(double r,gsl_vector * y, gsl_vector * dydt) {
+	gsl_vector_set(dydt,0,gsl_vector_get(y,1));
+	gsl_vector_set(dydt,1,-2.0*gsl_vector_get(y,0)*(epsilon+1.0/r));
+}
+
+void mfunc(gsl_vector * x, gsl_vector * tx) {
+	double rinit = 0.001, rmax = 8.0;
+	int n = 2;
+	double h = 0.001, acc = 0.001, relacc = 0.001;
+	
+	
+	gsl_vector * yinit = gsl_vector_alloc(n);
+	gsl_vector * yend = gsl_vector_alloc(n);
+	gsl_vector_set(yinit,0,rinit - rinit * rinit);
+	gsl_vector_set(yinit,1,1.0 - 2*rinit);
+	epsilon = gsl_vector_get(x,0);
+	
+	FILE * odeoutput = fopen("odeoutput.txt","w");
+	fprintf(odeoutput,"#numerical solution\n");
+	
+	driver(odeoutput,schroedinger,n,rinit,yinit,rmax,yend,h,acc,relacc);
+	gsl_vector_set(tx,0,gsl_vector_get(yend,0));
+	
+	fprintf(odeoutput,"\n\n#exact solution\n");
+	double rval, ryval, numsteps = 100;
+	for (int i = 0; i < numsteps; i++) {
+		rval = rinit + (rmax - rinit) * i / (numsteps - 1);
+		ryval = rval * exp(-rval);
+		fprintf(odeoutput,"%10g %10g %10g\n",rval,ryval,0.0);
+	}
+	
+	fclose(odeoutput);
+	gsl_vector_free(yinit);
+	gsl_vector_free(yend);
 }
 
 void newton(void (*f)(gsl_vector * x, gsl_vector * fx), gsl_vector * x, double eps) {
@@ -92,8 +130,31 @@ int main() {
 	double rosenbrockx = 1.4, rosenbrocky = 0.9; gsl_vector_set(rosenbrockvector,0,rosenbrockx); gsl_vector_set(rosenbrockvector,1,rosenbrocky);
 	newton(rosenbrockgrad,rosenbrockvector,eps);
 	vector_print("Roots of the gradient of Rosenbrock function = ",rosenbrockvector);
-	printf("within tolerance %10g\n",eps);
+	printf("within tolerance %10g\n\n",eps);
 	gsl_vector_free(x);
 	gsl_vector_free(rosenbrockvector);
+	
+	// Bound states of hydrogen atom with shooting method for b.v. problems
+	gsl_vector * epsvector = gsl_vector_alloc(1);
+	double accuracy = 0.001;
+	double epsinit = -2.0; // must be negative guess
+	gsl_vector_set(epsvector,0,epsinit);
+	newton(mfunc,epsvector,accuracy);
+	vector_print("Root of the M(epsilon) = ",epsvector);
+	printf("within tolerance %10g. This agrees well with the expected energy -1/2.\n\n",accuracy);
+	
+	gsl_vector_free(epsvector);
+	
+		
 return 0;
 }
+
+
+
+
+
+
+
+
+
+
