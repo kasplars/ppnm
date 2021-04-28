@@ -1,0 +1,12 @@
+Minimum of Rosenbrock's valley function = 
+[  0.999989] 
+[  0.999977] 
+within accuracy      1e-05
+number of steps 619
+
+
+Minimum of Himmelblau's function = 
+[  -2.80512] 
+[   3.13131] 
+within accuracy      1e-05
+number of steps 12
