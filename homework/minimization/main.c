@@ -135,7 +135,7 @@ int main() {
 	printf("within accuracy %10g\n",acc);
 	printf("number of steps %i\n",steps);
 	
-	gsl_vector_free(x);
+	gsl_vector_free(y);
 		
 return 0;
 }
