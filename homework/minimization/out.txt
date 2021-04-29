@@ -10,3 +10,11 @@ Minimum of Himmelblau's function =
 [   3.13131] 
 within accuracy      1e-05
 number of steps 12
+
+
+Minimum of Higgs in the format [E,Gamma,A]^T = 
+[   125.972] 
+[   2.08623] 
+[   9.87572] 
+within accuracy      1e-05
+number of steps 7615
