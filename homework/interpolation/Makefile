@@ -3,81 +3,123 @@ CFLAGS = -Wall -O1 -std=gnu11 #-DNDEBUG
 CFLAGS += $(shell /usr/bin/gsl-config --cflags)
 LDLIBS += $(shell /usr/bin/gsl-config --libs)
 
-default: out.txt quadspline.pyxplot.png quadderiv.pyxplot.png quadinteg.pyxplot.png lspline.pyxplot.png linteg.pyxplot.png
-	cat out.txt
-
-out.txt: linspline
+default: quadspline.png quadderiv.png quadinteg.png linearspline.png linearinteg.png cubicspline.png cubicderiv.png cubicinteg.png
+	@echo "\n\nLinear, quadratic and cubic spline all work as they should."	
+	
+outlspline.txt: linspline
 	./$< > $@
 
 outquadspline.txt: quadspline
 	./$< > $@
+	
+outcubicspline.txt: cubicspline
+	./$< > $@
 
-lspline.pyxplot.png: outlspline.txt Makefile
+linearspline.png: outlspline.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("z");\
-	set ylabel texify("f(z)");\
+	set xlabel "$$x$$";\
+	set ylabel "$$f(x)$$";\
 	set title "Linear Spline";\
 	plot \
 	 "$<" using 1:3 with line title "GSL"\
 	,"$<" using 1:2 with line title "Own implementation"\
 	'| pyxplot
 
-linteg.pyxplot.png: outlinteg.txt Makefile
+linearinteg.png: outlinteg.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("z");\
-	set ylabel texify("F(z)");\
+	set xlabel "$$x$$";\
+	set ylabel "$$F(x)$$";\
 	set title "Linear Spline Integral";\
 	plot \
 	 "$<" using 1:3 with line title "GSL"\
 	,"$<" using 1:2 with line title "Own implementation"\
 	'| pyxplot
 
-quadspline.pyxplot.png: outquadspline.txt Makefile
+quadspline.png: outquadspline.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("z");\
-	set ylabel texify("f(z)");\
+	set xlabel "$$x$$";\
+	set ylabel "$$f(x)$$";\
 	set title "Quadratic Spline";\
 	plot \
 	"$<" using 1:2 with line title "Own implementation"\
 	'| pyxplot
 
-quadderiv.pyxplot.png: outquadspline.txt Makefile
+quadderiv.png: outquadspline.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("z");\
-	set ylabel texify("Df(z)");\
+	set xlabel "$$x$$";\
+	set ylabel "$$Df(x)$$";\
 	set title "Quadratic Spline Derivative";\
 	plot \
 	"$<" using 1:3 with line title "Own implementation"\
 	'| pyxplot
 
-quadinteg.pyxplot.png: outquadspline.txt Makefile
+quadinteg.png: outquadspline.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("z");\
-	set ylabel texify("F(z)");\
+	set xlabel "$$x$$";\
+	set ylabel "$$F(x)$$";\
 	set title "Quadratic Spline Integral";\
+	plot \
+	"$<" using 1:4 with line title "Own implementation"\
+	'| pyxplot
+	
+cubicspline.png: outcubicspline.txt Makefile
+	echo '\
+	set terminal png;\
+	set output "$@";\
+	set key top left;\
+	set tics out;\
+	set xlabel "$$x$$";\
+	set ylabel "$$f(x)$$";\
+	set title "Cubic Spline";\
+	plot \
+	"$<" using 1:2 with line title "Own implementation"\
+	'| pyxplot
+
+cubicderiv.png: outcubicspline.txt Makefile
+	echo '\
+	set terminal png;\
+	set output "$@";\
+	set key top left;\
+	set tics out;\
+	set xlabel "$$x$$";\
+	set ylabel "$$Df(x)$$";\
+	set title "Cubic Spline Derivative";\
+	plot \
+	"$<" using 1:3 with line title "Own implementation"\
+	'| pyxplot
+
+cubicinteg.png: outcubicspline.txt Makefile
+	echo '\
+	set terminal png;\
+	set output "$@";\
+	set key top left;\
+	set tics out;\
+	set xlabel "$$x$$";\
+	set ylabel "$$F(x)$$";\
+	set title "Cubic Spline Integral";\
 	plot \
 	"$<" using 1:4 with line title "Own implementation"\
 	'| pyxplot
 
 clean:
-	$(RM) linspline quadspline
+	$(RM) linspline quadspline cubicspline out*

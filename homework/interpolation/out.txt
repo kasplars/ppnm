@@ -1,2 +1,0 @@
-Interpolation of f(z) on the interval [-10,10]. Check: f(z=5)=25
-Integration of f(z) on interval [-10,5]. Check: 375

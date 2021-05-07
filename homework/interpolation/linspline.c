@@ -22,7 +22,7 @@ double linterp(int n, gsl_vector * x, gsl_vector * y, double z) {
 	return gsl_vector_get(y,i)+dy/dx*(z-gsl_vector_get(x,i));
 }
 
-double func(double x) {return pow(x,2);}
+double func(double x) {return cos(x);}
 
 double linterp_integ(int n, gsl_vector * x, gsl_vector * y, double z) {
 	assert(n>1 && z>gsl_vector_get(x,0) && z<gsl_vector_get(x,n-1));
@@ -62,9 +62,7 @@ int main(){
 
 	// Point to be evaluated, print and free memory of vectors
 	double z = 5;
-	printf("Interpolation of f(z) on the interval [%g,%g]. Check: f(z=%g)=%g\n",xmin,xmax,z,linterp(n,x,y,z));
-	printf("Integration of f(z) on interval [%g,%g]. Check: %g\n",xmin,z,linterp_integ(n,x,y,z));
-
+	
 	FILE* outlspline = fopen("outlspline.txt","w");
 	FILE* outinteg = fopen("outlinteg.txt","w");
 	gsl_interp * linear = gsl_interp_alloc(gsl_interp_linear,n);
