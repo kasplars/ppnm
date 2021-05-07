@@ -28,4 +28,4 @@ time.pyxplot.png: outtime.txt Makefile
 .PHONEY: clean
 
 clean:
-	$(RM) qr-decomp errors.txt
+	$(RM) qr-decomp errors.txt outtime.txt
