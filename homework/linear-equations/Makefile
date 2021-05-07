@@ -17,8 +17,8 @@ time.pyxplot.png: outtime.txt Makefile
 	set output "$@";\
 	set key top left;\
 	set tics out;\
-	set xlabel texify("N");\
-	set ylabel "Seconds/(N cubed)";\
+	set xlabel "$$N$$";\
+	set ylabel "Seconds/$$N^3$$";\
 	set title "Time measuring of QR-decomposition";\
 	plot \
 	 "$<" using 1:3 with line title "GSL"\
