@@ -30,4 +30,4 @@ main: library.o ann.o
 .PHONEY: default clean
 	
 clean: 
-	$(RM) errors.txt *.o
+	$(RM) errors.txt *.o data.txt
