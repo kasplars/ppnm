@@ -14,10 +14,12 @@
 #define TRACE(...)
 #endif
 
-ann * ann_alloc(int n,double(*f)(double)){
+ann * ann_alloc(int n,double(*f)(double),double(*f_dif)(double),double(*f_int)(double)){
 	ann * network = malloc(sizeof(ann));
 	network->n=n;
 	network->f=f;
+	network->f_dif=f_dif;
+	network->f_int=f_int;
 	network->params = gsl_vector_alloc(3*n);
 	return network;
 }
@@ -30,9 +32,38 @@ void ann_free(ann * network){
 double ann_response(ann * network,double x){
 	double response = 0;
 	// params ordering = {ai,bi,wi,ai+1,bi+1,...}
+	double a, b, w;
 	for (int i = 0; i<network->n; i++) {
-		response += network->f(x-gsl_vector_get(network->params,3*i)/gsl_vector_get(network->params,3*i+1))
-			*gsl_vector_get(network->params,3*i+2);
+		a = gsl_vector_get(network->params,3*i);
+		b = gsl_vector_get(network->params,3*i+1);
+		w = gsl_vector_get(network->params,3*i+2);
+		response += network->f((x-a)/b)*w;
+	}
+	return response;
+}
+
+double ann_response_dif(ann * network,double x){
+	double response = 0;
+	double a, b, w;
+	// params ordering = {ai,bi,wi,ai+1,bi+1,...}
+	for (int i = 0; i<network->n; i++) {
+		a = gsl_vector_get(network->params,3*i);
+		b = gsl_vector_get(network->params,3*i+1);
+		w = gsl_vector_get(network->params,3*i+2);
+		response += network->f_dif((x-a)/b)*w/b;
+	}
+	return response;
+}
+
+double ann_response_int(ann * network,double x,double initialx){
+	double response = 0;
+	double a, b, w;
+	// params ordering = {ai,bi,wi,ai+1,bi+1,...}
+	for (int i = 0; i<network->n; i++) {
+		a = gsl_vector_get(network->params,3*i);
+		b = gsl_vector_get(network->params,3*i+1);
+		w = gsl_vector_get(network->params,3*i+2);
+		response += network->f_int((x-a)/b)*w*b - network->f_int((initialx-a)/b)*w*b;
 	}
 	return response;
 }

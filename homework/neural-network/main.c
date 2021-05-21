@@ -16,10 +16,10 @@
 #endif
 
 double gausswavelet(double x) {return x*exp(-pow(x,2));}
-double gauss(double x) {return exp(-pow(x,2));}
-double wavelet(double x) {return cos(5*x)*exp(-pow(x,2));}
+double gausswavelet_dif(double x) {return exp(-pow(x,2))-2*x*x*exp(-pow(x,2));}
+double gausswavelet_int(double x) {return -exp(-pow(x,2))/2.0;}
 
-double f(double x) {return x*x*x+1.0;}
+double f(double x) {return sin(x);}
 
 void linspace(gsl_vector * xs, double a, double b, int numpoints)  {
 	double dx = (b-a)/(numpoints-1);
@@ -29,10 +29,10 @@ void linspace(gsl_vector * xs, double a, double b, int numpoints)  {
 }
 
 int main(){
-	int n = 3;
-	ann * network=ann_alloc(n,gausswavelet);
+	int n = 3; 		// number of deep neurons
+	ann * network=ann_alloc(n,gausswavelet,gausswavelet_dif,gausswavelet_int);
 	
-	int numpoints = 30; double a = -1, b = 1;
+	int numpoints = 50; double a = -3.14, b = 3.14;
 	gsl_vector * xs = gsl_vector_alloc(numpoints);
 	gsl_vector * ys = gsl_vector_alloc(numpoints);
 	
@@ -44,9 +44,14 @@ int main(){
 		gsl_vector_set(ys,i,f(gsl_vector_get(xs,i)));
 		fprintf(data,"%10g %10g\n",gsl_vector_get(xs,i),gsl_vector_get(ys,i));
 	}
+	
 	fprintf(data,"\n\n\n");
 	
-	gsl_vector_set_all(network->params,1.0);
+	for (int i = 0; i<n; i++) {
+		gsl_vector_set(network->params,3*i,a+(b-a)*i/(n-1)); // displace uniformly on interval
+		gsl_vector_set(network->params,3*i+1,1);
+		gsl_vector_set(network->params,3*i+2,1);
+	}
 	
 	ann_train(network,xs,ys);
 	vector_print("p=",network->params);
@@ -55,14 +60,17 @@ int main(){
 	
 	gsl_vector * plotxs = gsl_vector_alloc(plotnum);
 	linspace(plotxs,a,b,plotnum);
-	double t, trained, real;
+	
+	double t, trained, trained_dif, trained_int, real;
 	
 	fprintf(data,"#index 1\n");
 	for (int i = 0; i<plotnum; i++) {
 		t = gsl_vector_get(plotxs,i);
 		trained = ann_response(network,t);
+		trained_dif = ann_response_dif(network,t);
+		trained_int = ann_response_int(network,t,a);
 		real = f(t);
-		fprintf(data,"%10g %10g %10g\n",t,trained,real);
+		fprintf(data,"%10g %10g %10g %10g %10g\n",t,trained,trained_dif,trained_int,real);
 	}
 	
 	fclose(data);

@@ -12,7 +12,7 @@ neuralnetwork.png: data.txt Makefile
 	echo '\
 	set terminal png;\
 	set output "$@";\
-	set key top left;\
+	set key outside;\
 	set tics out;\
 	set xlabel "$$x$$";\
 	set ylabel "$$f(x)$$";\
@@ -20,7 +20,9 @@ neuralnetwork.png: data.txt Makefile
 	plot \
 	 "$<" index 0 using 1:2 w p ps 0.4 pt 2 title "data for training"\
 	,"$<" index 1 using 1:2 with line lt 1 title "trained function"\
-	,"$<" index 1 using 1:3 with line lt 2 title "true function"\
+	,"$<" index 1 using 1:3 with line lt 1 title "trained function differentiated"\
+	,"$<" index 1 using 1:4 with line lt 1 title "trained function integrated"\
+	,"$<" index 1 using 1:5 with line lt 2 title "true function"\
 	'| pyxplot
 	
 data.txt: main
