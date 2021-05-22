@@ -1,3 +1,4 @@
+Part A and B
 Number of steps in training the NN: 13470
 p=
 [ -0.257516] 
@@ -9,3 +10,24 @@ p=
 [  0.257625] 
 [   -2.9149] 
 [  -2.27016] 
+The code correctly finds an approximation to the artificially created data set. It also finds
+the approximate derivative and anti-derivative.
+
+
+Part C
+Number of steps in training the NN: 58979
+p=
+[  -3.02941] 
+[    2.7968] 
+[  -3.13386] 
+[    1.7443] 
+[   7.48046] 
+[  0.294634] 
+[  -1.74431] 
+[   7.48045] 
+[  0.294632] 
+[   3.02941] 
+[   2.79679] 
+[  -3.13386] 
+The code correctly finds an approximation to the solution of the provided dif. eq.
+
