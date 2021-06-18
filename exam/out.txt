@@ -1,0 +1,1 @@
+Integral of f(x) from 0+0i to 1+2i is 1.27171+0.785961i. Number of evaluations: 4268.
