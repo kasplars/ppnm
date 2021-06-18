@@ -8,11 +8,10 @@ default: out.txt errors.txt
 out.txt errors.txt: main
 	./main 1> out.txt 2> errors.txt
 
-
 .PHONEY: default clean
 
 
 main: auxfile.o
 
 clean: 
-	$(RM) errors.txt *.o
+	$(RM) errors.txt *.o main
