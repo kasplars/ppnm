@@ -11,4 +11,4 @@ out.txt errors.txt: main
 .PHONEY: default clean
 	
 clean: 
-	$(RM) errors.txt *.o
+	$(RM) errors.txt main *.o

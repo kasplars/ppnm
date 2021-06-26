@@ -10,12 +10,6 @@
 
 double DELTA=sqrt(DBL_EPSILON);
 
-#ifndef NDEBUG
-#define TRACE(args...) fprintf(stderr,args)
-#else
-#define TRACE(...)
-#endif
-
 void sr1(gsl_matrix * B, gsl_vector * u, gsl_vector * y) {
 	int n = B->size1;
 	gsl_matrix * dB = gsl_matrix_alloc(n,n);

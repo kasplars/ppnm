@@ -3,12 +3,6 @@
 #include <math.h>
 #include <gsl/gsl_integration.h>
 
-#ifndef NDEBUG
-#define TRACE(args...) fprintf(stderr,args)
-#else
-#define TRACE(...)
-#endif
-
 double f(double x) {return 1.0/sqrt(x);}
 double p(double x) {return 4.0*sqrt(1-pow(x,2));}
 
@@ -37,9 +31,7 @@ double clenshaw_curtis(double (*f)(double),double a,double b,double delta,double
 }
 
 int main() {
-	TRACE("0\n");
 	double a = 0.0, b = 1.0, delta = 0.01, epsilon = 0.01; int numevals = 0;
-	TRACE("1\n");
 	double function(double x){numevals++; return f(x);}
 	double integral = recadapter(function,a,b,delta,epsilon);
 	
@@ -74,7 +66,6 @@ int main() {
 	
 	gsl_integration_workspace_free (workspace);
 	
-	TRACE("2\n");
 	
 return 0;
 }

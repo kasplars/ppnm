@@ -234,7 +234,9 @@ int main() {
 
 
 	// Part 3
+	printf("\n\n------------------------\nPart C\n\n");
 	measuretime(300);
+	printf("There is a plot comparing my implementation with GSL's implementation. Obviously, theirs is faster. In both cases, we see the O(N^3) scaling of the speed.\n");
 
 return 0;
 }

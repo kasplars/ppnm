@@ -7,12 +7,6 @@
 #include "auxfile.h"
 #include <assert.h>
 
-#ifndef NDEBUG
-#define TRACE(args...) fprintf(stderr,args)
-#else
-#define TRACE(...)
-#endif
-
 void least_sq(gsl_vector * x, gsl_vector * y, gsl_vector * dy,
 	gsl_vector * c,double (*f)(double, int),int m,gsl_matrix * S) {
 	int n = x->size;

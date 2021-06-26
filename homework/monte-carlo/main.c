@@ -3,12 +3,6 @@
 #include <stdio.h>
 #define RND ((double)rand()/RAND_MAX)
 
-#ifndef NDEBUG
-#define TRACE(args...) fprintf(stderr,args)
-#else
-#define TRACE(...)
-#endif
-
 void randomx(int dim, double * a, double * b, double * x) {
 	for(int i=0;i<dim;i++)x[i]=a[i]+RND*(b[i]-a[i]);
 }

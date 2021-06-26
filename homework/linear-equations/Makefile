@@ -11,6 +11,8 @@ out.txt: qr-decomp
 
 errors.txt: qr-decomp
 
+outtime.txt: qr-decomp
+
 time.pyxplot.png: outtime.txt Makefile
 	echo '\
 	set terminal png;\
