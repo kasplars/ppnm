@@ -1,0 +1,83 @@
+Part 1
+
+Max integer is determined with while loop to be:
+Max integer = 2147483647
+
+Max integer is determined with for loop to be:
+2147483637
+2147483638
+2147483639
+2147483640
+2147483641
+2147483642
+2147483643
+2147483644
+2147483645
+2147483646
+2147483647
+Max integer ^
+
+Max integer is determined with a do while loop to be:
+Max integer = 2147483647
+
+Min integer is determined with while loop to be:
+Min integer = -2147483648
+
+Min integer is determined with for loop to be:
+-2147483638
+-2147483639
+-2147483640
+-2147483641
+-2147483642
+-2147483643
+-2147483644
+-2147483645
+-2147483646
+-2147483647
+-2147483648
+Min integer ^
+
+Min integer is determined with a do while loop to be:
+Min integer = -2147483648
+
+Calculating the machine epsilon for different types using while loops:
+
+my machine epsilon = 2.220446049e-16 for double
+my machine epsilon = 1.084202172e-19 for long double
+my machine epsilon = 0.0000001192 for float
+
+Calculating the machine epsilon for different types using for loops
+
+my machine epislon = 2.220446049e-16 for double
+my machine epislon = 1.084202172e-19 for long double
+my machine epislon = 0.0000001192 for float
+
+Calculating the machine epsilon for different types using do while loops
+
+my machine epsilon = 2.220446049e-16 for double
+my machine epsilon = 1.084202172e-19 for long double
+my machine epsilon = 0.0000001192 for float
+
+Comparing with the built-in values:
+
+machine double epsilon = 2.220446049e-16
+machine long double epsilon = 1.084202172e-19
+machine float epsilon = 0.0000001192
+
+Part 2
+
+The sum up float is 15.4037
+The sum down float is 18.8079
+Explanation for ^ is commented out.
+The sum up double is 21.3716
+
+The sum down double is 21.3716
+Explanation for ^ is commented out.
+
+Part 3
+
+1
+
+Part 4
+
+three

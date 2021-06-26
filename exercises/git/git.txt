@@ -1,0 +1,44 @@
+1. Read about git, for example at Bitbucket
+	Done!
+	
+2. "sudo apt install git"
+	Also done!
+	
+3. Get yourself an account in one of the Distributed Version Control servers. Bitbucket, Github, and Gitlab (which run git only) are popular choices with free plans. Sourceforge (which runs both git and mercurial) is another possibility. 
+	I've got one now.
+	
+4. At the server: create a new empty project with an indicative name, like ppnm, and find out its address (depends on the server).
+	The project ppnm has been created.
+	
+5. At your box:
+make a directory for yor ppnm repository,
+
+"mkdir -p ~/repos/ppnm"
+
+go to your directory,
+
+"cd ~/repos/ppnm"
+
+clone your (empty) repository at the server to this directory,
+
+"git clone address-of-your-repository ./"
+
+if you use git, or
+
+"hg clone address-of-your-repository ./"
+
+if you use mercury.
+Do your exercises in this directory, commit changes, and push to the server,
+
+"git add --all
+git commit --all -m 'Initial commit'
+git push"
+
+or, if mercurial,
+
+"hg add
+hg commit -m 'Initial commit'
+hg push"
+
+	This has also been done now. I use git.
+
