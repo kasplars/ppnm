@@ -1,3 +1,5 @@
+Part A and B
+
 Integral of f(x) from 0 to 1 is 1.99952 not using Clenshaw-Curtis. Number of evaluations: 4272.
 Integral of f(x) from 0 to 1 is 1.9978 using Clenshaw-Curtis. Number of evaluations: 4.
 So there is a lot of improvement in numbers of evaluations.
@@ -10,3 +12,15 @@ QAGS from GSL library, the result, error and number of function evaluations are:
 3.53356455207177e-10
 231,
 respectively.
+
+
+Part C
+
+Using own routine:
+
+The gaussian function integrated from -infinity to infity is equal to 1.772453813 with error estimate 2.648487873e-08. The real value is sqrt(pi). The number of evaluations were 1272.
+
+Using GSL routine:
+
+The gaussian function integrated from -infinity to infity is equal to 1.772453851 with error estimate 3.429548872e-08. The real value is sqrt(pi). The number of evaluations were 210.
+
