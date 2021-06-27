@@ -31,3 +31,4 @@ The gaussian function integrated from -infinity to infity is equal to 1.77245385
 
 The function 1/(x*x+1) integrated from 0 to infity is equal to 1.570796327 with error estimate 2.577791521e-10. The real value is pi/2. The number of evaluations were 90.
 
+All in all, GSL performs much better.

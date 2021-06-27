@@ -90,6 +90,7 @@ int main() {
 	gsl_integration_qagiu(&H,0,delta,epsilon,limits,workspace3,&result,&error);
 	printf("The function 1/(x*x+1) integrated from 0 to infity is equal to %.10g with error estimate %.10g. The real value is pi/2. The number of evaluations were %i.\n\n",result,error,numevals);
 	
+	printf("All in all, GSL performs much better.\n");
 	
 	gsl_integration_workspace_free (workspace);
 	gsl_integration_workspace_free (workspace2);
