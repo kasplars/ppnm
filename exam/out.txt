@@ -1,1 +1,24 @@
-Integral of f(x) from 0+0i to 1+2i is 1.27171+0.785961i. Number of evaluations: 4268.
+
+A recursive adaptive integrator calculating integrals of complex-valued functions has been implemented in this set of files.
+Recursive adaptive integration with and without the Clenshaw-Curtis variable transformation quadrature is given.
+Tests of the adaptive integrators are given below:
+
+Results from integration of f(z)=1/(2*sqrt(z)) from 0+0i to 1+2i:
+	calculated integral value:	1.27171189549271+0.785961i
+	true integral value:		sqrt(1+2i)
+	error estimate: 		0.00104622360186974
+	number of evaluations: 		4268
+	relative accuracy:		0.001
+	absolute accuracy:		0.001
+	method:				Ordinary recursive adaptive integration
+
+
+Results from integration of f(z)=1/(2*sqrt(z)) from 0+0i to 1+2i:
+	calculated integral value:	1.27199189892146+0.786134i
+	true integral value:		sqrt(1+2i)
+	error estimate: 		0.00191154726840243
+	number of evaluations: 		12
+	relative accuracy:		0.001
+	absolute accuracy:		0.001
+	method:				Adaptive integrator with Clenshaw-Curtis
+
