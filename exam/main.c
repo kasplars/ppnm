@@ -11,7 +11,7 @@ My exam problem is number 6 since 72 % 22 = 6
 
 PROBLEM STATEMENT:
 
-- 6 - Adaptive integration of complex-valued functins
+- 6 - Adaptive integration of complex-valued functions
 
 Implement an adaptive integrator which calculates the integral of a complex-valued function f(z) of a complex variable z 
 along a straight line between two points in the complex plane. 
