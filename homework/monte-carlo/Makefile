@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -O -std=gnu11 -DNDEBUG
+CFLAGS = -Wall -O2 -std=gnu11 -DNDEBUG
 CFLAGS += $(shell /usr/bin/gsl-config --cflags)
 LDLIBS += $(shell /usr/bin/gsl-config --libs)
 
@@ -16,15 +16,22 @@ comparison.png: comparison.txt Makefile
 	set tics out;\
 	set xlabel "$$N$$";\
 	set ylabel "error estimate";\
-	set yrange [0:2.5];\
 	set title "Error comparison";\
+	a=1; b=-1; t(x)=a*x**b;\
+	c=1; d=-1; r(x)=c*x**d;\
+	fit t(x) withouterrors "$<" using 1:3 via a,b;\
+	fit r(x) withouterrors "$<" using 1:5 via c,d;\
 	plot \
-	 "$<" using 1:3 with line lt 1 title "Pseudo: $$\sigma\\cdot\sqrt{N}\\cdot$$ scaling factor"\
-	,"$<" using 1:5 with line lt 2 title "Quasi: $$\sigma \\cdot (\ln{N})^{d}/N\\cdot$$ scaling factor, d is dimensionality"\
+	 "$<" using 1:3 with points pt 2 ps 0.4 title "Pseudo-random"\
+	,"$<" using 1:5 with points pt 2 ps 0.4 title "Quasi-random"\
+	, t(x) with lines title "$$%.2fN^{%.2f}$$"%(a,b)\
+	, r(x) with lines title "$$%.2fN^{%.2f}$$"%(c,d)\
 	'| pyxplot
 
 
 comparison.txt: main
+
+main: functions.o
 
 .PHONEY: default clean
 	
